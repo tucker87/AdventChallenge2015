@@ -13,6 +13,7 @@ namespace AdventChallenege2015
             Console.WriteLine(Day1.Solve2(GetInputData().Day1));
             Console.WriteLine(Day2.Solve1(GetInputData().Day2));
             Console.WriteLine(Day2.Solve2(GetInputData().Day2));
+            Console.WriteLine(Day3.Solve1(GetInputData().Day3));
             Console.ReadLine();
         }
 
