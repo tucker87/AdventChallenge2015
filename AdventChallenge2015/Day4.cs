@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AdventChallenege2015
@@ -11,6 +13,20 @@ namespace AdventChallenege2015
     {
         //117946
         //3938038
+
+        public static int Solve(string input, string condition)
+        {
+            var current = 0;
+            var found = false;
+            var hash = new Tuple<int, string>(0, "");
+            while (!found)
+            {
+                hash = GetHash(input, current++);
+                found = hash.Item2.Contains(condition);
+            }
+            return hash.Item1;
+        }
+
         public static async Task<int> SolveAsync(string input, string condition)
         {
             var current = 0;
