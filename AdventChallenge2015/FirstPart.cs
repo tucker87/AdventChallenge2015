@@ -8,7 +8,7 @@ namespace AdventChallenege2015
 {
     class FirstPart
     {
-        private static void Main(string[] args)
+        private static void Main2(string[] args)
         {
             var i = 0;
             var floor = 0;
