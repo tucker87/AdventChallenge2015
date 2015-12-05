@@ -20,6 +20,7 @@ namespace AdventChallenege2015
             var hasThreeVowels = Regex.Match(child, @"([aeiou].*){3,}").Success;
             var hasDoubleUp = Regex.Match(child, @"(.)\1").Success;
             var hasRestricted = Regex.Match(child, @"(ab|cd|pq|xy)").Success;
+
             return (hasThreeVowels && hasDoubleUp && !hasRestricted);
         }
 
@@ -28,7 +29,7 @@ namespace AdventChallenege2015
         {
             bool hasDoubleUp = false, hasRestricted = false;
             
-            var hasThreeVowels = child.Count(chr => Vowels.Contains(char.ToLowerInvariant(chr))) >= 3;
+            var hasThreeVowels = child.Count(chr => Vowels.Contains(chr)) >= 3;
 
             for (var i = 0; i < child.Length - 1; i++)
             {
