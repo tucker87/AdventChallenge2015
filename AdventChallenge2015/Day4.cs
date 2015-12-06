@@ -13,69 +13,67 @@ namespace AdventChallenege2015
         //3938038
         public static int Solve(string input, string condition)
         {
-            using (var md5 = MD5.Create())
-            {
-                var current = 0;
-                var found = false;
-                var hash = new Tuple<int, string>(0, "");
-                while (!found)
-                {
-                    hash = GetHash(md5, input, current++);
-                    found = hash.Item2.Contains(condition);
-                }
-                return hash.Item1;
-            }
+            return NextHash(input).First(hash => FoundHash(hash.Item2, condition)).Item1;
         }
 
-        public static async Task<int> SolveAsync(string input, string condition)
+        public static int Solve2(string input, string condition)
         {
-            var current = 0;
-            const int step = 10000;
+            return FindHashAsync(input, condition).Result;
+        }
+
+        private static async Task<int> FindHashAsync(string input, string condition)
+        {
+            var start = 0;
+            const int batchSize = 250;
             var found = false;
-            var result = 0;
-
-            while (!found)
-            {
-                var tasks = new List<Task<Dictionary<int, string>>>();
-                for (var i = 0; i < 8; i++)
-                    tasks.Add(GetHashesAsync(MD5.Create(), input, current + 1, current += step));
-
-                await Task.WhenAll(tasks);
-
-                foreach (var task in tasks)
+            var tasks = new List<Task<int>>();
+            for (var i = 0; i < 8; i++)
+                tasks.Add(Task.Factory.StartNew(() =>
                 {
-                    found = task.Result.Any(x => x.Value.Contains(condition));
-                    if (found)
-                    {
-                        result = task.Result.First(x => x.Value.Contains(condition)).Key;
-                        break;
-                    }
+                    using (var md5 = MD5.Create())
+                        while (!found)
+                        {
+                            var batch = NextHashBatch(md5, input, start++, start += batchSize);
+                            if (batch.Count(x => FoundHash(x.Value, condition)) > 0)
+                                return batch.First(x => FoundHash(x.Value, condition)).Key;
+                        }
+                    return -1;
+                }));
+
+            await Task.WhenAny(tasks);
+            found = true;
+            return tasks.First(x => x.Result != -1).Result;
+        }
+
+        private static bool FoundHash(string hash, string condition)
+        {
+            return hash.Contains(condition);
+        }
+
+        private static Dictionary<int, string> NextHashBatch(HashAlgorithm md5, string input, int start, int batchSize)
+        {
+            var hashBatch = new Dictionary<int, string>();
+                for (var i = start; i < batchSize; i++)
+                {
+                    var hash = GetHash(md5, input, i);
+                    hashBatch.Add(hash.Item1, hash.Item2);
                 }
-            }
-            return result;
+            return hashBatch;
         }
 
-        public static Task<Dictionary<int, string>> GetHashesAsync(HashAlgorithm md5,string input, int start, int stop)
+        private static IEnumerable<Tuple<int, string>> NextHash(string input)
         {
-            return Task<Dictionary<int, string>>.Factory.StartNew(() => GetHashes(md5, input, start, stop));
-        }
+            using(var md5 = MD5.Create())
+                for (var i = 0; i < int.MaxValue; i++)
+                    yield return GetHash(md5, input, i);
 
-        private static Dictionary<int, string> GetHashes(HashAlgorithm md5, string input, int start, int stop)
-        {
-            var hashes = new Dictionary<int, string>();
-            var current = start;
-            while (current <= stop)
-            {
-                var hash = GetHash(md5, input, current++);
-                hashes.Add(hash.Item1, hash.Item2);
-            }
-            return hashes;
-        } 
+            throw new Exception("Hit int max!");
+        }
 
         private static Tuple<int, string> GetHash(HashAlgorithm md5, string input, int step)
         {
-                var data = md5.ComputeHash(Encoding.UTF8.GetBytes(input + step));
-                return new Tuple<int, string>(step, string.Join("", data.Take(3).Select(x => x.ToString("x2")).ToArray()));
+            var data = md5.ComputeHash(Encoding.UTF8.GetBytes(input + step));
+            return new Tuple<int, string>(step, string.Join("", data.Select(x => x.ToString("x2")).ToArray()));
         }
     }
 }

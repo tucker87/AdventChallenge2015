@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -14,10 +15,10 @@ namespace AdventChallenege2015
             Console.WriteLine(Day2.Solve2(GetInputData().Day2));
             Console.WriteLine(Day3.Solve1(GetInputData().Day3));
             Console.WriteLine(Day3.Solve2(GetInputData().Day3));
-            //Console.WriteLine(Day4.Solve(GetInputData().Day4, "00000"));
-            //Console.WriteLine(Day4.Solve(GetInputData().Day4, "000000"));
-            //Console.WriteLine(Day4.SolveAsync(GetInputData().Day4, "00000").Result);
-            //Console.WriteLine(Day4.SolveAsync(GetInputData().Day4, "000000").Result);
+            Console.WriteLine(Day4.Solve(GetInputData().Day4, "00000"));
+            Console.WriteLine(Day4.Solve(GetInputData().Day4, "000000"));
+            Console.WriteLine(Day4.Solve2(GetInputData().Day4, "00000"));
+            Console.WriteLine(Day4.Solve2(GetInputData().Day4, "000000"));
             Console.WriteLine(Day5.Solve1(GetInputData().Day5));
             Console.WriteLine(Day5.Solve2(GetInputData().Day5));
 
