@@ -19,12 +19,12 @@ namespace AdventChallenege2015
             return FindBrightness(grid);
         }
 
-        private static int FindBrightness(int[][] grid)
+        private static int FindBrightness(int[,] grid)
         {
             var count = 0;
             for (var r = 0; r < 1000; r++)
                 for (var c = 0; c < 1000; c++)
-                    count += grid[r][c];
+                    count += grid[r,c];
 
             return count;
         }
@@ -37,12 +37,9 @@ namespace AdventChallenege2015
                 .ToList();
         }
 
-        private static int[][] RunActions(IEnumerable<string> input)
+        private static int[,] RunActions(IEnumerable<string> input)
         {
-            var grid = new int[1000][];
-
-            for (var c = 0; c < 1000; c++)
-                grid[c] = new int[1000];
+            var grid = new int[1000,1000];
 
             foreach (var instruction in input)
             {
@@ -90,11 +87,11 @@ namespace AdventChallenege2015
                 .Select(x => Convert.ToInt32(x)).ToList());
         }
 
-        private static void TakeAction(int[][] grid, Coord coord, Func<int, int> function)
+        private static void TakeAction(int[,] grid, Coord coord, Func<int, int> function)
         {
             for (var r = coord.X; r <= coord.X2; r++)
                 for (var c = coord.Y; c <= coord.Y2; c++)
-                    grid[r][c] = function.Invoke(grid[r][c]);
+                    grid[r,c] = function.Invoke(grid[r,c]);
         }
     }
 
