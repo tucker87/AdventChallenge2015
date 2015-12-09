@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace AdventChallenege2015
 {
     internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             //Console.WriteLine(Day1.Solve1(GetInputData().Day1));
             //Console.WriteLine(Day1.Solve2(GetInputData().Day1));
@@ -25,8 +26,15 @@ namespace AdventChallenege2015
             Console.WriteLine(Day6.Solve2(GetInputData().Day6));
             Console.WriteLine(new Day7().Solve1(GetInputData().Day7));
             Console.WriteLine(new Day7().Solve2(GetInputData().Day7));
+            Console.WriteLine(new Day8().Solve1(GetTextInputData()));
+            Console.WriteLine(new Day8().Solve2(GetTextInputData()));
 
             Console.ReadLine();
+        }
+
+        private static List<string> GetTextInputData()
+        {
+            return File.ReadAllLines("day8.txt").ToList();
         }
 
         public static JsonInput GetInputData()
