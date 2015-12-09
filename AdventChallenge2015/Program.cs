@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -22,6 +23,8 @@ namespace AdventChallenege2015
             //Console.WriteLine(Day5.Solve2(GetInputData().Day5));
             Console.WriteLine(Day6.Solve(GetInputData().Day6));
             Console.WriteLine(Day6.Solve2(GetInputData().Day6));
+            Console.WriteLine(new Day7().Solve1(GetInputData().Day7));
+            Console.WriteLine(new Day7().Solve2(GetInputData().Day7));
 
             Console.ReadLine();
         }
