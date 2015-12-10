@@ -11,6 +11,6 @@ namespace AdventChallenege2015
         public List<string> Day5 { get; set; }
         public List<string> Day6 { get; set; }
         public List<string> Day7 { get; set; }
-        public object Day8 { get; set; }
+        public List<string> Day9 { get; set; }
     }
 }

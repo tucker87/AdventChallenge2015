@@ -8,6 +8,8 @@ namespace AdventChallenege2015
     {
         private List<Wire> Wires { get; } = new List<Wire>();
         private List<Gate> Gates { get; } = new List<Gate>();
+
+        //956
         public ushort Solve1(List<string> input)
         {
             foreach (var instruction in input)
@@ -15,28 +17,19 @@ namespace AdventChallenege2015
                 var gate = GetGate(instruction);
                 Gates.Add(gate);
                 var wireNames = WireNames(instruction);
-                AttachToGate(new[]{ wireNames[0], wireNames[1]}, gate);
+                AttachToGate(wireNames.Take(2), gate);
                 AttachFromGate(wireNames[2], gate);
             }
 
             return Wires.First(x => x.Name == "a").Output;
         }
 
+        //40149
         public ushort Solve2(List<string> input)
         {
             var overrideB = Solve1(input);
-
-            foreach (var gate in Gates)
-            {
-                if (gate.Wires.Any(x => x.Name == "b"))
-                    for(var i = 0; i < gate.Wires.Count; i++)
-                    {
-                        if (gate.Wires[i].Name == "b")
-                            gate.Wires[i] = new EndWire(overrideB) { Name = "b" };
-                    }
-            }
-
-            Wires.Remove(Wires.First(x => x.Name == "b"));
+            Wires.Single(x => x.Name == "b").Output = overrideB;
+            
             foreach (var gate in Gates)
                 gate.Reset();
 
@@ -84,7 +77,7 @@ namespace AdventChallenege2015
             return new List<string> { value1, value2, target };
         }
 
-        private void AttachToGate(IReadOnlyList<string> wireNames, Gate gate)
+        private void AttachToGate(IEnumerable<string> wireNames, Gate gate)
         {
             foreach (var wireName in wireNames)
             {
@@ -99,12 +92,7 @@ namespace AdventChallenege2015
                         Wires.Add(wire);
                         gate.Wires.Add(wire);
                     }
-                    else if (string.IsNullOrEmpty(wireName))
-                    {
-                        var wire = new EndWire(0);
-                        gate.Wires.Add(wire);
-                    }
-                    else
+                    else if (!string.IsNullOrEmpty(wireName))
                     {
                         var wire = new Wire {Name = wireName};
                         Wires.Add(wire);
@@ -129,7 +117,13 @@ namespace AdventChallenege2015
         public virtual string Name { get; set; }
         public Gate Input { get; set; }
 
-        public virtual ushort Output => Input.Output;
+        private ushort? _overrideOutput;
+
+        public virtual ushort Output
+        {
+            get { return _overrideOutput ?? Input.Output; }
+            set { _overrideOutput = value; }
+        }
 
         public override string ToString()
         {
@@ -152,7 +146,7 @@ namespace AdventChallenege2015
             set { _name = value; }
         }
 
-        public override ushort Output { get; }
+        public override ushort Output { get; set; }
     }
 
     class Gate
@@ -166,7 +160,7 @@ namespace AdventChallenege2015
         public Func<ushort, ushort, ushort> Function { get; set; }
 
         private ushort? _output;
-        public ushort Output => (ushort)(_output ?? (_output = Function.Invoke(Wires[0].Output, Wires[1].Output)));
+        public ushort Output => (ushort)(_output ?? (_output = Function.Invoke(Wires[0].Output, Wires.Count > 1 ? Wires[1].Output : default(ushort))));
 
         public void Reset()
         {
