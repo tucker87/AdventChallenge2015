@@ -6,21 +6,21 @@ namespace AdventChallenege2015
     internal class Day1
     {
         //138
-        public static int Solve1(string input)
+        public static string Solve1<TIn>(TIn input)
         {
-            return ParseInput(input).Sum();
+            return ParseInput(input.ToString()).Sum().ToString();
         }
 
         //1771
-        public static int Solve2(string input)
+        public static string Solve2<TIn>(TIn input)
         {
-            var dataSet = ParseInput(input);
+            var dataSet = ParseInput(input.ToString());
             var answer = 0;
             var i = 0;
             while(answer >= 0)
                 answer += dataSet[++i - 1];
 
-            return i;
+            return i.ToString();
         }
 
         public static List<int> ParseInput(string input)

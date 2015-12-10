@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace AdventChallenege2015
 {
-    internal class Day7
+    static class Day7
     {
-        private List<Wire> Wires { get; } = new List<Wire>();
-        private List<Gate> Gates { get; } = new List<Gate>();
+        private static List<Wire> Wires { get; } = new List<Wire>();
+        private static List<Gate> Gates { get; } = new List<Gate>();
 
         //956
-        public ushort Solve1(List<string> input)
+        public static ushort Solve1(List<string> input)
         {
             foreach (var instruction in input)
             {
@@ -25,9 +25,9 @@ namespace AdventChallenege2015
         }
 
         //40149
-        public ushort Solve2(List<string> input)
+        public static ushort Solve2(List<string> input)
         {
-            var overrideB = Solve1(input);
+            var overrideB = Wires.First(x => x.Name == "a").Output;
             Wires.Single(x => x.Name == "b").Output = overrideB;
             
             foreach (var gate in Gates)
@@ -77,7 +77,7 @@ namespace AdventChallenege2015
             return new List<string> { value1, value2, target };
         }
 
-        private void AttachToGate(IEnumerable<string> wireNames, Gate gate)
+        private static void AttachToGate(IEnumerable<string> wireNames, Gate gate)
         {
             foreach (var wireName in wireNames)
             {
@@ -102,7 +102,7 @@ namespace AdventChallenege2015
             }
         }
 
-        private void AttachFromGate(string target, Gate gate)
+        private static void AttachFromGate(string target, Gate gate)
         {
             var wire = Wires.FirstOrDefault(x => x.Name == target);
             if (wire != null)
@@ -146,7 +146,7 @@ namespace AdventChallenege2015
             set { _name = value; }
         }
 
-        public override ushort Output { get; set; }
+        public override sealed ushort Output { get; set; }
     }
 
     class Gate

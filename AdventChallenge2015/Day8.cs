@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace AdventChallenege2015
 {
-    internal class Day8
+    static class Day8
     {
-        public int Solve1(List<string> input)
+        public static int Solve1(List<string> input)
         {
             var originalLength = input.Sum(x => x.Length);
             var escapedLength =
@@ -17,7 +17,7 @@ namespace AdventChallenege2015
             return originalLength - escapedLength;
         }
 
-        public int Solve2(List<string> input)
+        public static int Solve2(List<string> input)
         {
             var originalLength = input.Sum(x => x.Length);
             var unescapedLength =
